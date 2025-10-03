@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Interactive for manual config
+INTERACTIVE_INSTALL=${1:-true}
+
 # ===========
 # CONFIG
 # ===========
@@ -44,6 +47,17 @@ else
 fi
 
 # ===========
+# INSTALL MESLO NERD FONT (Recommended for Powerlevel10k)
+# ===========
+if ! fc-list | grep -i "MesloLGS NF" >/dev/null 2>&1; then
+    echo "[*] Installing MesloLGS NF font (recommended for Powerlevel10k)..."
+    install_pkg ttf-meslo-nerd-font-powerlevel10k
+    echo "[✔] Font installed. You may need to restart your terminal and set MesloLGS NF as your terminal font."
+else
+    echo "[*] MesloLGS NF font already installed."
+fi
+
+# ===========
 # INSTALL POWERLEVEL10K
 # ===========
 if [ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]; then
@@ -55,7 +69,7 @@ else
 fi
 
 # ===========
-# OPTIONAL PLUGINS
+# ADDITIONAL PLUGINS
 # ===========
 if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
     echo "[*] Installing zsh-autosuggestions..."
