@@ -9,7 +9,7 @@ INTERACTIVE_INSTALL=${1:-true}
 # ===========
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 ZSH_CUSTOM="${ZSH_CUSTOM:-$ZSH/custom}"
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}" # change if needed
+DOTFILES_DIR="$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse --show-toplevel)"
 ZSHRC="$HOME/.zshrc"
 
 # ===========
@@ -91,17 +91,9 @@ echo "[*] Configuring .zshrc..."
 # Backup existing
 [ -f "$ZSHRC" ] && cp "$ZSHRC" "$ZSHRC.backup.$(date +%s)"
 
-cat > "$ZSHRC" <<EOF
-export ZSH="$ZSH"
-
-ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
-source \$ZSH/oh-my-zsh.sh
-
-# To customize Powerlevel10k prompt, run 'p10k configure' or edit ~/.p10k.zsh
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-EOF
+# Copy new config
+cp "$DOTFILES_DIR/scripts/config/zshrc-config.zsh" "$ZSHRC"
+cp "$DOTFILES_DIR/scripts/config/p10k.zsh" "$HOME/.p10k.zsh"
 
 # ===========
 # DEFAULT SHELL TO ZSH
