@@ -5,6 +5,29 @@ set -euo pipefail
 INTERACTIVE_INSTALL=${1:-true}
 
 # ===========
+# PREREQUISITES CHECK
+# ===========
+echo "[*] Checking prerequisites..."
+
+MISSING_DEPS=()
+
+# Check for required commands
+for cmd in git curl wget yay pacman zsh; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        MISSING_DEPS+=("$cmd")
+    fi
+done
+
+# Fail if any dependencies are missing
+if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
+    echo "[✗] Error: Missing required dependencies: ${MISSING_DEPS[*]}"
+    echo "    Please install them before running this script."
+    exit 1
+fi
+
+echo "[✔] All prerequisites satisfied."
+
+# ===========
 # CONFIG
 # ===========
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
